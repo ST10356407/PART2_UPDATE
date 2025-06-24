@@ -1,0 +1,285 @@
+﻿@model AgriConnect.Models.FarmerDashboardViewModel
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Products Dashboard - AgriConnect</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        body {
+            background: linear-gradient(135deg, #000000 0%, #004d26 50%, #48bb78 100%);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+            body::before {
+                content: '';
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: radial-gradient(circle at 20% 80%, #000000(120, 119, 198, 0.3) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%), radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.2) 0%, transparent 50%);
+                pointer-events: none;
+                z-index: -1;
+            }
+
+        .glass-container, .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .glass-header {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        .glass-button {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+            .glass-button::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+                transition: left 0.5s ease;
+            }
+
+            .glass-button:hover::before {
+                left: 100%;
+            }
+
+            .glass-button:hover {
+                background: rgba(255, 255, 255, 0.3);
+                transform: translateY(-3px);
+                box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+                border: 1px solid rgba(255, 255, 255, 0.4);
+            }
+
+        .glass-input {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+            .glass-input:focus {
+                background: rgba(255, 255, 255, 0.15);
+                border: 1px solid rgba(255, 255, 255, 0.4);
+                box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1), 0 8px 25px rgba(0, 0, 0, 0.1);
+                outline: none;
+            }
+
+            .glass-input::placeholder {
+                color: rgba(255, 255, 255, 0.7);
+            }
+
+        .glass-table {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .product-row {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+            .product-row:hover {
+                background: rgba(255, 255, 255, 0.1);
+                transform: translateX(8px);
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            }
+
+        .text-glass {
+            color: rgba(255, 255, 255, 0.95);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .text-glass-muted {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .icon-glow {
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
+        }
+
+        .floating-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-shape {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+            .floating-shape:nth-child(1) {
+                width: 80px;
+                height: 80px;
+                top: 10%;
+                left: 10%;
+                animation-delay: 0s;
+            }
+
+            .floating-shape:nth-child(2) {
+                width: 120px;
+                height: 120px;
+                top: 70%;
+                right: 10%;
+                animation-delay: 2s;
+            }
+
+            .floating-shape:nth-child(3) {
+                width: 60px;
+                height: 60px;
+                top: 40%;
+                left: 80%;
+                animation-delay: 4s;
+            }
+
+        @@keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-20px) rotate(180deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-shapes">
+        <div class="floating-shape"></div>
+        <div class="floating-shape"></div>
+        <div class="floating-shape"></div>
+    </div>
+
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="glass-header rounded-3xl p-8 mb-8 shadow-2xl">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-4xl font-bold flex items-center text-glass">
+                        <i class="fas fa-boxes mr-4 icon-glow"></i>
+                        Products Dashboard
+                    </h1>
+                    <p class="text-glass-muted mt-2 text-lg">Manage listed products</p>
+                </div>
+                <div class="flex gap-4">
+                    <a href="@Url.Action("FarmerAddProduct", "Farmer")"
+                       class="glass-button text-glass hover:text-white font-semibold py-3 px-8 rounded-2xl flex items-center shadow-lg">
+                        <i class="fas fa-box mr-3 icon-glow"></i> Add Product
+                    </a>
+                    <a href="/Authentication/Login"
+                       class="glass-button text-glass hover:text-white font-semibold py-3 px-8 rounded-2xl flex items-center shadow-lg">
+                        <i class="fas fa-arrow-left mr-3 icon-glow"></i> Back to Login
+                    </a>
+                </div>
+            </div>
+            <div class="mt-4 text-glass">
+                <h3 class="text-lg font-semibold">Welcome, @ViewBag.FarmerName</h3>
+                <p>You have @ViewBag.ProductCount products.</p>
+            </div>
+        </div>
+
+        <!-- Products Section -->
+        <div class="glass-card rounded-3xl shadow-2xl p-8">
+            <h2 class="text-2xl font-bold text-glass mb-6">
+                <i class="fas fa-leaf mr-3 icon-glow"></i>Products
+            </h2>
+
+            <!-- Filters -->
+            <form method="get" asp-action="FarmerDashboard" asp-controller="Farmer" class="mb-6">
+                <div class="glass-container rounded-2xl p-6 flex flex-wrap gap-4 shadow-xl">
+                    <input type="text" name="nameFilter" placeholder="Filter by Name"
+                           value="@Context.Request.Query["nameFilter"]"
+                           class="glass-input rounded-xl px-6 py-3 w-64 text-glass placeholder-opacity-70" />
+
+                    <input type="text" name="categoryFilter" placeholder="Filter by Category"
+                           value="@Context.Request.Query["categoryFilter"]"
+                           class="glass-input rounded-xl px-6 py-3 w-64 text-glass placeholder-opacity-70" />
+
+                    <input type="date" name="startDateFilter" placeholder="Filter by Date"
+                           value="@Context.Request.Query["startDateFilter"]"
+                           class="glass-input rounded-xl px-6 py-3 w-64 text-glass placeholder-opacity-70" />
+
+                    <button type="submit"
+                            class="glass-button text-glass hover:text-white px-8 py-3 rounded-xl font-semibold shadow-lg">
+                        <i class="fas fa-filter mr-2 icon-glow"></i>Filter
+                    </button>
+                </div>
+            </form>
+
+            <!-- Product Table -->
+            @if (Model.Products != null && Model.Products.Any())
+            {
+                <div class="glass-table rounded-2xl overflow-x-auto">
+                    <table class="min-w-full">
+                        <thead class="glass-container bg-opacity-10">
+                            <tr>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-glass uppercase">Product Name</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-glass uppercase">Category</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-glass uppercase">Farmer ID</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-glass uppercase">Created Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var product in Model.Products)
+                            {
+                                <tr class="product-row">
+                                    <td class="px-6 py-4 text-base font-medium text-glass">@product.ProductName</td>
+                                    <td class="px-6 py-4 text-base text-glass">@product.Category</td>
+                                    <td class="px-6 py-4 text-base text-glass">@product.FarmerId</td>
+                                    <td class="px-6 py-4 text-base text-glass">@product.ProductionDate?.ToString("yyyy-MM-dd")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center p-16">
+                    <div class="glass-container rounded-2xl p-12 inline-block">
+                    
+                        <h3 class="text-xl font-semibold text-glass mb-2">No products found</h3>
+                        <p class="text-glass-muted">There are currently no products available.</p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</body>
+</html>
+@*  Devexpress.com. (2024). Create a Dashboard in Visual Studio | Business Intelligence Dashboard | DevExpress Documentation. [online] Available at: https://docs.devexpress.com/Dashboard/16307/get-started/build-wpf-dashboard-applications/create-a-dashboard-in-visual-studio [Accessed 14 May 2025]. *@

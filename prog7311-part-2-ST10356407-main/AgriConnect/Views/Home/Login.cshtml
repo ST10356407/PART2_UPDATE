@@ -1,0 +1,212 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Login - AgriConnect</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        /* Video Background */
+        #video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            z-index: -1;
+        }
+        #video-background video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.6);
+            animation: slowPlayback 60s linear infinite;
+        }
+        @@keyframes slowPlayback {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+       
+        .glass-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 30px rgba(72, 187, 120, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            border-radius: 1rem;
+        
+
+        }
+
+        .glass-input {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #fff;
+            border-radius: 0.75rem;
+            width: 100%;
+            height: 3rem;
+            padding-left: 2.75rem;
+            transition: all 0.3s ease;
+        }
+
+        .glass-input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .glass-input:focus {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 0 3px rgba(72, 187, 120, 0.3), 0 8px 25px rgba(0, 0, 0, 0.2);
+            outline: none;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1.125rem;
+            pointer-events: none;
+            transition: color 0.3s ease;
+        }
+
+        .input-icon.focused {
+            color: #48bb78;
+        }
+
+        .glass-button {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #fff;
+            border-radius: 0.75rem;
+            height: 3.5rem;
+            width: 100%;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .glass-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @@keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+
+    <!-- Video Background -->
+    <div id="video-background">
+        <video autoplay muted loop playsinline>
+            <source src="~/images/gradient.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+
+    <!-- Main Form Section Centered -->
+    <main class="flex-grow flex items-center justify-center p-4 relative z-10">
+        <div class="w-full max-w-md">
+            <div class="glass-container overflow-hidden">
+                
+                <!-- Header -->
+                <div class="gradient-bg p-8 text-center">
+                    <div class="flex justify-center mb-4">
+                        <i class="fas fa-leaf text-white text-5xl animate-float"></i>
+                    </div>
+                    <h1 class="text-3xl font-bold text-white">Welcome Back</h1>
+                    <p class="text-green-100 mt-2">Sign in to your AgriConnect account</p>
+                </div>
+
+                <!-- Form -->
+                <div class="p-8">
+                    <form asp-controller="Authentication" asp-action="Login" method="post" class="space-y-6">
+                        @if (ViewBag.Error != null)
+                        {
+                            <div class="bg-red-600 bg-opacity-30 border border-red-500 text-red-100 p-3 rounded-lg text-center">
+                                @ViewBag.Error
+                            </div>
+                        }
+
+                        <!-- Username -->
+                        <div class="relative">
+                            <i class="fas fa-user input-icon"></i>
+                            <input type="text" name="username" class="glass-input" placeholder="Username" required />
+                        </div>
+
+                        <!-- Password -->
+                        <div class="relative">
+                            <i class="fas fa-lock input-icon"></i>
+                            <input type="password" name="password" class="glass-input" placeholder="Password" required />
+                        </div>
+
+                        <!-- Remember Me -->
+                        <div class="flex items-center justify-between text-sm mt-2">
+                            <label class="flex items-center">
+                                <input type="checkbox" name="remember-me" class="h-4 w-4 text-green-500 bg-transparent border-gray-300 rounded focus:ring-0">
+                                <span class="ml-2">Remember me</span>
+                            </label>
+                            <a href="#" class="text-green-300 hover:text-green-200">Forgot password?</a>
+                        </div>
+
+                        <!-- Login Button -->
+                        <button type="submit" class="glass-button mt-4">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Login
+                        </button>
+                    </form>
+
+                    <!-- Sign Up Link -->
+                    <div class="text-center mt-6 text-sm">
+                        <p>Don't have an account? 
+                            <a asp-controller="Authentication" asp-action="Register" class="text-green-300 hover:text-green-200 font-medium">
+                                Sign up
+                            </a>
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.querySelectorAll('.glass-input').forEach(input => {
+            input.addEventListener('focus', function () {
+                this.parentElement.querySelector('i').classList.add('focused');
+            });
+            input.addEventListener('blur', function () {
+                if (!this.value) {
+                    this.parentElement.querySelector('i').classList.remove('focused');
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
+@*  VectoArt (2023). How To Use Keyframe Animations - VectoArt - Medium. [online] Medium. Available at: https://medium.com/@artillustration391/how-to-use-keyframe-animations-f920c835e334 [Accessed 14 May 2025].
+Agarwal, N. (2020). Create a Login System Using PHP, MySQL, and HTML. [online] dzone.com. Available at: https://dzone.com/articles/create-a-login-system-using-php.
+                *@
+                @* https://www.youtube.com/watch?v=n77yqF5fdBE *@

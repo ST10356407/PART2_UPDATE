@@ -1,0 +1,233 @@
+﻿@model AgriConnect.Models.Product
+
+@{
+    ViewData["Title"] = "Add Product";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] - AgriConnect</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        .glass-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            border-radius: 1rem;
+        }
+
+        .glass-header {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            border-radius: 1rem;
+        }
+
+        .glass-input {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            transition: all 0.3s ease;
+            border-radius: 0.75rem;
+            padding-left: 3rem;
+            width: 100%;
+            height: 3rem;
+            font-size: 1rem;
+        }
+
+            .glass-input::placeholder {
+                color: rgba(255, 255, 255, 0.7);
+            }
+
+            .glass-input:focus {
+                background: rgba(255, 255, 255, 0.15);
+                border: 1px solid rgba(255, 255, 255, 0.4);
+                box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1), 0 8px 25px rgba(0, 0, 0, 0.1);
+                outline: none;
+                color: #fff;
+            }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 0.8rem;
+            top: 70%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1.25rem;
+            pointer-events: none;
+            transition: color 0.3s ease;
+        }
+
+            .input-icon.focused {
+                color: #48bb78;
+            }
+
+        .glass-button {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            border-radius: 0.75rem;
+            color: #fff;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+            height: 3.5rem;
+            font-size: 1.125rem;
+        }
+
+            .glass-button::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+                transition: left 0.5s ease;
+                border-radius: 0.75rem;
+                z-index: 1;
+            }
+
+            .glass-button:hover::before {
+                left: 100%;
+            }
+
+            .glass-button:hover {
+                background: rgba(255, 255, 255, 0.3);
+                transform: translateY(-3px);
+                box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+                border: 1px solid rgba(255, 255, 255, 0.4);
+                color: #e6ffe6;
+            }
+
+        body {
+            background: linear-gradient(135deg, #000000 0%, #004d26 50%, #48bb78 100%);
+            min-height: 100vh;
+            color: #e6ffe6;
+        }
+
+        .validation-error {
+            color: #ff6b6b;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1.5rem;
+            padding-top: 1.5rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-2xl mx-auto">
+            <!-- Header Section -->
+            <div class="glass-header p-6 mb-8 shadow-lg">
+                <div class="flex items-center space-x-4">
+                    <i class="fas fa-box text-4xl icon-glow" style="color:#48bb78;"></i>
+                    <div>
+                        <h1 class="text-2xl font-bold">Add New Product</h1>
+                        <p class="text-green-200">Add a new product to your inventory</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Card -->
+            <div class="glass-container p-8">
+                <form asp-action="FarmerAddProduct" asp-controller="Farmer" method="post" class="space-y-6">
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div class="bg-red-600 bg-opacity-30 border border-red-500 p-4 mb-6 rounded-lg text-red-200">
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-exclamation-circle text-red-400"></i>
+                                <div>
+                                    <h3 class="text-sm font-medium">Please correct the following errors:</h3>
+                                    <ul class="mt-2 list-disc list-inside">
+                                        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                                        {
+                                            <li>@error.ErrorMessage</li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    <!-- Product Name -->
+                    <div class="input-wrapper">
+                        <label asp-for="ProductName" class="block mb-1 font-medium">Product Name</label>
+                        <i class="fas fa-tag input-icon"></i>
+                        <input asp-for="ProductName" class="glass-input" placeholder="e.g., Organic Tomatoes" />
+                        <span asp-validation-for="ProductName" class="validation-error"></span>
+                    </div>
+
+                    <!-- Category -->
+                    <div class="input-wrapper">
+                        <label asp-for="Category" class="block mb-1 font-medium">Category</label>
+                        <i class="fas fa-cogs input-icon"></i>
+                        <input asp-for="Category" class="glass-input" placeholder="e.g., Vegetables" />
+                        <span asp-validation-for="Category" class="validation-error"></span>
+                    </div>
+
+                    <!-- Production Date -->
+                    <div class="input-wrapper">
+                        <label asp-for="ProductionDate" class="block mb-1 font-medium">Production Date</label>
+                        <i class="fas fa-calendar-day input-icon"></i>
+                        <input asp-for="ProductionDate" type="date" class="glass-input" />
+                        <span asp-validation-for="ProductionDate" class="validation-error"></span>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="button-group">
+                        <button type="submit" class="glass-button flex-1">
+                            <i class="fas fa-save"></i>
+                            Save Product
+                        </button>
+                        <a href="@Url.Action("FarmerDashboard", "Farmer")" class="glass-button flex-1 justify-center flex items-center gap-2">
+                            <i class="fas fa-arrow-left"></i>
+                            Back to Dashboard
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.glass-input').forEach(input => {
+            input.addEventListener('focus', function () {
+                this.parentElement.querySelector('i').classList.add('focused');
+            });
+            input.addEventListener('blur', function () {
+                if (!this.value) {
+                    this.parentElement.querySelector('i').classList.remove('focused');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+@* ‌Muñoz, A. (n.d.). How to create and optimize a product database for your store. [online] blog.saleslayer.com. Available at: https://blog.saleslayer.com/how-to-create-and-optimize-a-product-database-for-your-store. *@

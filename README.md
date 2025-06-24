@@ -1,6 +1,6 @@
 # PART2_UPDATE
 
-I declare I used AI in terms of helping with styling as well as with error handling and debugging and some to provide some guidance
+I declare I used AI in terms of helping with styling as well as with error handling and debugging, and to provide some guidance
 
 
 

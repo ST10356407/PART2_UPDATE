@@ -1,4 +1,11 @@
 # PART2_UPDATE
+
+I declare I used AI in terms of helping with styling as well as with error handling and debugging and some to provide some guidance
+
+
+
+
+
  AgriConnect – Farmer-Employee Product Management System
 AgriConnect is a role-based ASP.NET Core MVC web application designed to simplify and secure the management of agricultural product data between farmers and employees. The platform enables tailored access based on user roles, ensuring efficient collaboration while maintaining data security and integrity.
 
